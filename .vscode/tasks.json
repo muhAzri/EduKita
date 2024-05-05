@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+       
+        {
+            "label": "Build and Start Local Docker",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "build-local",
+                "start-local"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Builds and runs the local Docker environment"
+
+        }
+      
+    ]
+}
