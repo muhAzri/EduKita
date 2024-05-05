@@ -9,7 +9,7 @@ import (
 type UserRepository interface {
 	CreateUser(user entity.User) (model.UserModel, error)
 	GetUserByID(id string) (model.UserModel, error)
-	GetUserByFirebaseID(id string) (model.UserModel, error)
+	GetUserByFirebaseId(id string) (model.UserModel, error)
 	GetUserByEmail(email string) (model.UserModel, error)
 	UpdateUser(user entity.User) error
 	DeleteUser(id string) error
@@ -27,7 +27,7 @@ func (r *UserRepositoryImpl) CreateUser(user entity.User) (model.UserModel, erro
 
 	query := `INSERT INTO users (id, firebase_id, name, email, profile_picture, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id,firebase_id, name, email, profile_picture, created_at, updated_at`
 
-	row := r.db.QueryRow(query, user.ID, user.FirebaseID, user.Name, user.Email, user.ProfilePicture, user.CreatedAt, user.UpdatedAt)
+	row := r.db.QueryRow(query, user.ID, user.FirebaseId, user.Name, user.Email, user.ProfilePicture, user.CreatedAt, user.UpdatedAt)
 
 	var userModel model.UserModel
 
@@ -48,7 +48,7 @@ func (r *UserRepositoryImpl) GetUserByID(id string) (model.UserModel, error) {
 
 	var user model.UserModel
 
-	err := row.Scan(&user.ID, &user.FirebaseID, &user.Name, &user.Email, &user.ProfilePicture, &user.CreatedAt, &user.UpdatedAt)
+	err := row.Scan(&user.ID, &user.FirebaseId, &user.Name, &user.Email, &user.ProfilePicture, &user.CreatedAt, &user.UpdatedAt)
 
 	if err != nil {
 		return model.UserModel{}, err
@@ -57,7 +57,7 @@ func (r *UserRepositoryImpl) GetUserByID(id string) (model.UserModel, error) {
 	return user, nil
 }
 
-func (r *UserRepositoryImpl) GetUserByFirebaseID(id string) (model.UserModel, error) {
+func (r *UserRepositoryImpl) GetUserByFirebaseId(id string) (model.UserModel, error) {
 
 	query := `SELECT id,firebase_id, name, email, profile_picture, created_at, updated_at FROM users WHERE firebase_id = $1`
 
@@ -65,7 +65,7 @@ func (r *UserRepositoryImpl) GetUserByFirebaseID(id string) (model.UserModel, er
 
 	var user model.UserModel
 
-	err := row.Scan(&user.ID, &user.FirebaseID, &user.Name, &user.Email, &user.ProfilePicture, &user.CreatedAt, &user.UpdatedAt)
+	err := row.Scan(&user.ID, &user.FirebaseId, &user.Name, &user.Email, &user.ProfilePicture, &user.CreatedAt, &user.UpdatedAt)
 
 	if err == sql.ErrNoRows {
 		return model.UserModel{}, nil
@@ -86,7 +86,7 @@ func (r *UserRepositoryImpl) GetUserByEmail(email string) (model.UserModel, erro
 
 	var user model.UserModel
 
-	err := row.Scan(&user.ID, &user.FirebaseID, &user.Name, &user.Email, &user.ProfilePicture, &user.CreatedAt, &user.UpdatedAt)
+	err := row.Scan(&user.ID, &user.FirebaseId, &user.Name, &user.Email, &user.ProfilePicture, &user.CreatedAt, &user.UpdatedAt)
 
 	if err != nil {
 		return model.UserModel{}, err

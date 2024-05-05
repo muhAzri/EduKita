@@ -24,7 +24,7 @@ func NewUsecase(repository repositories.UserRepository) *UsecaseImpl {
 
 func (u *UsecaseImpl) Login(LoginModel model.LoginModel, FirebaseId string) (model.UserModel, error) {
 
-	gettedUser, err := u.repository.GetUserByFirebaseID(FirebaseId)
+	gettedUser, err := u.repository.GetUserByFirebaseId(FirebaseId)
 
 	if err != nil {
 		return model.UserModel{}, err
@@ -33,7 +33,7 @@ func (u *UsecaseImpl) Login(LoginModel model.LoginModel, FirebaseId string) (mod
 	if gettedUser.ID == "" {
 		newUserModel := model.UserModel{
 			ID:             uuid.New().String(),
-			FirebaseID:     FirebaseId,
+			FirebaseId:     FirebaseId,
 			Name:           LoginModel.Name,
 			Email:          LoginModel.Email,
 			ProfilePicture: LoginModel.ProfilePicture,

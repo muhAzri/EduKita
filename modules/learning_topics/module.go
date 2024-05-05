@@ -1,0 +1,5 @@
+package learningtopics
+
+func StartLearningTopicsModule() {
+
+}
