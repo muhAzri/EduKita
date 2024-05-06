@@ -1,6 +1,6 @@
 package entity
 
-type LearningTopics struct {
+type LearningTopic struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Slug        string `json:"slug"`

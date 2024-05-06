@@ -25,13 +25,13 @@ func NewUserRepository(db *sql.DB) *UserRepositoryImpl {
 
 func (r *UserRepositoryImpl) CreateUser(user entity.User) (model.UserModel, error) {
 
-	query := `INSERT INTO users (id, firebase_id, name, email, profile_picture, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id,firebase_id, name, email, profile_picture, created_at, updated_at`
+	query := `INSERT INTO users (id, firebase_id, name, email, profile_picture, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, firebase_id, name, email, profile_picture, created_at, updated_at`
 
 	row := r.db.QueryRow(query, user.ID, user.FirebaseId, user.Name, user.Email, user.ProfilePicture, user.CreatedAt, user.UpdatedAt)
 
 	var userModel model.UserModel
 
-	err := row.Scan(&userModel.ID, &userModel.Name, &userModel.Email, &userModel.ProfilePicture, &userModel.CreatedAt, &userModel.UpdatedAt)
+	err := row.Scan(&userModel.ID, &userModel.FirebaseId, &userModel.Name, &userModel.Email, &userModel.ProfilePicture, &userModel.CreatedAt, &userModel.UpdatedAt)
 
 	if err != nil {
 		return model.UserModel{}, err

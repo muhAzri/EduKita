@@ -4,6 +4,7 @@ import (
 	"EduKita/modules/auth"
 	"EduKita/modules/core"
 	"EduKita/modules/firebase"
+	learningtopics "EduKita/modules/learning_topics"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -22,6 +23,7 @@ func main() {
 				// 	response.BuildResponseSuccess(http.StatusOK, "Welcome to EduKita", "success", map[string]interface{}{"message": "Welcome to EduKita"}, w)
 				// })
 				auth.StartAuthModule(r, db)
+				learningtopics.StartLearningTopicsModule(r, db)
 
 			},
 		)
