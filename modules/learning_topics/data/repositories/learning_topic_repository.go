@@ -64,9 +64,9 @@ func (r *LearningTopicRepositoryImpl) GetAllLearningTopics() ([]model.LearningTo
 
 func (r *LearningTopicRepositoryImpl) UpdateLearningTopic(topic entity.LearningTopic) error {
 
-	query := `UPDATE learning_topics SET name = $1, slug = $2, description = $3, updated_at = $4 WHERE id = $5`
+	query := `UPDATE learning_topics SET name = $1, slug = $2, description = $3, type = $4, icon = $5, updated_at = $4 WHERE id = $5`
 
-	_, err := r.db.Exec(query, topic.Name, topic.Slug, topic.Description, topic.UpdatedAt, topic.ID)
+	_, err := r.db.Exec(query, topic.Name, topic.Slug, topic.Description, topic.Type, topic.Icon, topic.UpdatedAt, topic.ID)
 
 	if err != nil {
 		return err
