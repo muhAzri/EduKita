@@ -23,13 +23,13 @@ func NewLearningTopicRepository(db *sql.DB) *LearningTopicRepositoryImpl {
 
 func (r *LearningTopicRepositoryImpl) CreateLearningTopic(topic entity.LearningTopic) (model.LearningTopicModel, error) {
 
-	query := `INSERT INTO learning_topics (name, slug, description, created_at, updated_at) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, slug, description, created_at, updated_at`
+	query := `INSERT INTO learning_topics (name, slug, description, type, icon, created_at, updated_at) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, slug, description, type, icon,  created_at, updated_at`
 
-	row := r.db.QueryRow(query, topic.Name, topic.Slug, topic.Description, topic.CreatedAt, topic.UpdatedAt)
+	row := r.db.QueryRow(query, topic.Name, topic.Slug, topic.Description, topic.Type, topic.Icon, topic.CreatedAt, topic.UpdatedAt)
 
 	var learningTopic model.LearningTopicModel
 
-	err := row.Scan(&learningTopic.ID, &learningTopic.Name, &learningTopic.Slug, &learningTopic.Description, &learningTopic.CreatedAt, &learningTopic.UpdatedAt)
+	err := row.Scan(&learningTopic.ID, &learningTopic.Name, &learningTopic.Slug, &learningTopic.Description, &learningTopic.Type, &learningTopic.Icon, &learningTopic.CreatedAt, &learningTopic.UpdatedAt)
 
 	if err != nil {
 		return model.LearningTopicModel{}, err
@@ -40,7 +40,7 @@ func (r *LearningTopicRepositoryImpl) CreateLearningTopic(topic entity.LearningT
 
 func (r *LearningTopicRepositoryImpl) GetAllLearningTopics() ([]model.LearningTopicModel, error) {
 
-	query := `SELECT id, name, slug, description, created_at, updated_at FROM learning_topics`
+	query := `SELECT id, name, slug, description, type, icon, created_at, updated_at FROM learning_topics`
 
 	rows, err := r.db.Query(query)
 
@@ -52,7 +52,7 @@ func (r *LearningTopicRepositoryImpl) GetAllLearningTopics() ([]model.LearningTo
 
 	for rows.Next() {
 		var learningTopic model.LearningTopicModel
-		err := rows.Scan(&learningTopic.ID, &learningTopic.Name, &learningTopic.Slug, &learningTopic.Description, &learningTopic.CreatedAt, &learningTopic.UpdatedAt)
+		err := rows.Scan(&learningTopic.ID, &learningTopic.Name, &learningTopic.Slug, &learningTopic.Description, &learningTopic.Type, &learningTopic.Icon, &learningTopic.CreatedAt, &learningTopic.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -64,9 +64,9 @@ func (r *LearningTopicRepositoryImpl) GetAllLearningTopics() ([]model.LearningTo
 
 func (r *LearningTopicRepositoryImpl) UpdateLearningTopic(topic entity.LearningTopic) error {
 
-	query := `UPDATE learning_topics SET name = $1, slug = $2, description = $3, updated_at = $4 WHERE id = $5`
+	query := `UPDATE learning_topics SET name = $1, slug = $2, description = $3, type = $4, icon = $5, updated_at = $4 WHERE id = $5`
 
-	_, err := r.db.Exec(query, topic.Name, topic.Slug, topic.Description, topic.UpdatedAt, topic.ID)
+	_, err := r.db.Exec(query, topic.Name, topic.Slug, topic.Description, topic.Type, topic.Icon, topic.UpdatedAt, topic.ID)
 
 	if err != nil {
 		return err
