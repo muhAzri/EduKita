@@ -10,19 +10,19 @@ import (
 	"github.com/google/uuid"
 )
 
-type Usecase interface {
+type LoginUsecase interface {
 	Login(LoginModel model.LoginModel, FirebaseId string) (model.UserModel, error)
 }
 
-type UsecaseImpl struct {
+type LoginUsecaseImpl struct {
 	repository repositories.UserRepository
 }
 
-func NewUsecase(repository repositories.UserRepository) *UsecaseImpl {
-	return &UsecaseImpl{repository}
+func NewLoginUsecase(repository repositories.UserRepository) *LoginUsecaseImpl {
+	return &LoginUsecaseImpl{repository}
 }
 
-func (u *UsecaseImpl) Login(LoginModel model.LoginModel, FirebaseId string) (model.UserModel, error) {
+func (u *LoginUsecaseImpl) Login(LoginModel model.LoginModel, FirebaseId string) (model.UserModel, error) {
 
 	gettedUser, err := u.repository.GetUserByFirebaseId(FirebaseId)
 

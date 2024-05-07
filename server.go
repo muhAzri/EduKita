@@ -13,16 +13,23 @@ import (
 func main() {
 	r, db := core.StartCore()
 	firebaseMiddleware := firebase.StartFirebaseModule()
+	authMiddleware := auth.StartAuthMiddleware()
 
 	r.Group(func(r chi.Router) {
-		r.Use(firebaseMiddleware.AuthMiddleware)
+		r.Route(
+			"/api/v1/auth",
+			func(r chi.Router) {
+				auth.StartAuthModule(r, db, firebaseMiddleware)
+			},
+		)
+	})
+
+	r.Group(func(r chi.Router) {
 		r.Route(
 			"/api/v1",
 			func(r chi.Router) {
-				// r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-				// 	response.BuildResponseSuccess(http.StatusOK, "Welcome to EduKita", "success", map[string]interface{}{"message": "Welcome to EduKita"}, w)
-				// })
-				auth.StartAuthModule(r, db)
+				r.Use(authMiddleware.AuthMiddleware)
+
 				learningtopics.StartLearningTopicsModule(r, db)
 
 			},

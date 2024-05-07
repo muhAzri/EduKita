@@ -19,12 +19,14 @@ import (
 
 func InitializeAuthHandler(db *sql.DB) *handler.AuthHandler {
 	userRepositoryImpl := repositories.NewUserRepository(db)
-	usecaseImpl := usecases.NewUsecase(userRepositoryImpl)
+	loginUsecaseImpl := usecases.NewLoginUsecase(userRepositoryImpl)
+	generateTokenUsecaseImpl := usecases.NewGenerateTokenUsecase()
+	refreshTokenUsecaseImpl := usecases.NewRefreshTokenUsecase()
 	validate := validator.New()
-	authHandler := handler.NewAuthHandler(usecaseImpl, validate)
+	authHandler := handler.NewAuthHandler(loginUsecaseImpl, generateTokenUsecaseImpl, refreshTokenUsecaseImpl, validate)
 	return authHandler
 }
 
 // auth_handler.go:
 
-var AuthHandlerSet = wire.NewSet(repositories.NewUserRepository, wire.Bind(new(repositories.UserRepository), new(*repositories.UserRepositoryImpl)), usecases.NewUsecase, wire.Bind(new(usecases.Usecase), new(*usecases.UsecaseImpl)), validator.New, handler.NewAuthHandler)
+var AuthHandlerSet = wire.NewSet(repositories.NewUserRepository, wire.Bind(new(repositories.UserRepository), new(*repositories.UserRepositoryImpl)), usecases.NewLoginUsecase, wire.Bind(new(usecases.LoginUsecase), new(*usecases.LoginUsecaseImpl)), usecases.NewGenerateTokenUsecase, wire.Bind(new(usecases.GenerateTokenUsecase), new(*usecases.GenerateTokenUsecaseImpl)), usecases.NewRefreshTokenUsecase, wire.Bind(new(usecases.RefreshTokenUsecase), new(*usecases.RefreshTokenUsecaseImpl)), validator.New, handler.NewAuthHandler)

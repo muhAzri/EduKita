@@ -16,8 +16,12 @@ import (
 var AuthHandlerSet = wire.NewSet(
 	repositories.NewUserRepository,
 	wire.Bind(new(repositories.UserRepository), new(*repositories.UserRepositoryImpl)),
-	usecases.NewUsecase,
-	wire.Bind(new(usecases.Usecase), new(*usecases.UsecaseImpl)),
+	usecases.NewLoginUsecase,
+	wire.Bind(new(usecases.LoginUsecase), new(*usecases.LoginUsecaseImpl)),
+	usecases.NewGenerateTokenUsecase,
+	wire.Bind(new(usecases.GenerateTokenUsecase), new(*usecases.GenerateTokenUsecaseImpl)),
+	usecases.NewRefreshTokenUsecase,
+	wire.Bind(new(usecases.RefreshTokenUsecase), new(*usecases.RefreshTokenUsecaseImpl)),
 	validator.New,
 	handler.NewAuthHandler,
 )
@@ -25,4 +29,5 @@ var AuthHandlerSet = wire.NewSet(
 func InitializeAuthHandler(db *sql.DB) *handler.AuthHandler {
 	wire.Build(AuthHandlerSet)
 	return &handler.AuthHandler{}
+
 }
