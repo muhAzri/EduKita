@@ -5,7 +5,7 @@ import (
 	"EduKita/modules/learning_topics/domain/usecases"
 	"net/http"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 )
 
 type LearningTopicHandler struct {

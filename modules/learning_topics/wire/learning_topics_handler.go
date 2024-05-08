@@ -9,7 +9,7 @@ import (
 	"EduKita/modules/learning_topics/handler"
 	"database/sql"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 	"github.com/google/wire"
 )
 

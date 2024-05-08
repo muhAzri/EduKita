@@ -5,6 +5,7 @@ import (
 	"EduKita/modules/core"
 	"EduKita/modules/firebase"
 	learningtopics "EduKita/modules/learning_topics"
+	"EduKita/modules/question"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -31,6 +32,7 @@ func main() {
 				r.Use(authMiddleware.AuthMiddleware)
 
 				learningtopics.StartLearningTopicsModule(r, db)
+				question.StartQuestionModule(r, db)
 
 			},
 		)
