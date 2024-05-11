@@ -10,7 +10,9 @@ import (
 func SetUpLearningTopicsRoutes(router chi.Router, db *sql.DB) {
 
 	questionHandler := wire.InitializeQuestionHandler(db)
+	answerHandler := wire.InitializeAnswerHandler(db)
 
 	router.Get("/questions/{learning_topic_id}", questionHandler.GetQuestionByLearningTopic)
 	router.Get("/questions/{learning_topic_id}/quiz", questionHandler.Get10RandomQuestionByLearningTopic)
+	router.Post("/questions/answer", answerHandler.AnswerQuestion)
 }
