@@ -13,18 +13,20 @@ import (
 )
 
 type AuthHandler struct {
-	loginUsecase         usecases.LoginUsecase
-	generateTokenUsecase usecases.GenerateTokenUsecase
-	refreshTokenUsecase  usecases.RefreshTokenUsecase
-	validate             *validator.Validate
+	loginUsecase           usecases.LoginUsecase
+	getShortProfileUsecase usecases.GetShortProfileUsecase
+	generateTokenUsecase   usecases.GenerateTokenUsecase
+	refreshTokenUsecase    usecases.RefreshTokenUsecase
+	validate               *validator.Validate
 }
 
-func NewAuthHandler(loginUsecase usecases.LoginUsecase, generateTokenUsecase usecases.GenerateTokenUsecase, refreshTokenUsecase usecases.RefreshTokenUsecase, validate *validator.Validate) *AuthHandler {
+func NewAuthHandler(loginUsecase usecases.LoginUsecase, generateTokenUsecase usecases.GenerateTokenUsecase, refreshTokenUsecase usecases.RefreshTokenUsecase, getShortProfileUsecase usecases.GetShortProfileUsecase, validate *validator.Validate) *AuthHandler {
 	return &AuthHandler{
-		loginUsecase:         loginUsecase,
-		generateTokenUsecase: generateTokenUsecase,
-		refreshTokenUsecase:  refreshTokenUsecase,
-		validate:             validate,
+		loginUsecase:           loginUsecase,
+		getShortProfileUsecase: getShortProfileUsecase,
+		generateTokenUsecase:   generateTokenUsecase,
+		refreshTokenUsecase:    refreshTokenUsecase,
+		validate:               validate,
 	}
 }
 
@@ -76,9 +78,21 @@ func (ah *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 
 	newToken, err := ah.refreshTokenUsecase.RefreshAccessToken(refreshModel.RefreshToken)
 	if err != nil {
+		fmt.Println(err.Error())
+		fmt.Println(refreshModel.RefreshToken)
 		response.BuildResponseFailure(http.StatusInternalServerError, err.Error(), w)
 		return
 	}
 
 	response.BuildResponseSuccess(http.StatusOK, "Refresh success", "success", newToken, w)
+}
+
+func (ah *AuthHandler) GetShortProfile(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(constants.UserIDKey).(string)
+	user, err := ah.getShortProfileUsecase.GetShortProfile(userID)
+	if err != nil {
+		response.BuildResponseFailure(http.StatusInternalServerError, err.Error(), w)
+		return
+	}
+	response.BuildResponseSuccess(http.StatusOK, "Get short profile success", "success", user, w)
 }

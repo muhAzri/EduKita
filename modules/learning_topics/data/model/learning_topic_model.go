@@ -7,6 +7,6 @@ type LearningTopicModel struct {
 	Description string `json:"description"`
 	Type        string `json:"type"`
 	Icon        string `json:"icon"`
-	CreatedAt   string `json:"created_at"`
-	UpdatedAt   string `json:"updated_at"`
+	CreatedAt   int    `json:"createdAt"`
+	UpdatedAt   int    `json:"updatedAt"`
 }
