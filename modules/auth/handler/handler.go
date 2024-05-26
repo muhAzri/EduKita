@@ -6,7 +6,6 @@ import (
 	"EduKita/modules/core/constants"
 	"EduKita/modules/core/response"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -34,7 +33,6 @@ func (ah *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var loginModel model.LoginModel
 	err := json.NewDecoder(r.Body).Decode(&loginModel)
 	if err != nil {
-		fmt.Println("Error decoding request body:", err)
 		response.BuildResponseFailure(http.StatusBadRequest, "Invalid request body", w)
 		return
 	}
@@ -65,7 +63,6 @@ func (ah *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	var refreshModel model.RefreshModel
 	err := json.NewDecoder(r.Body).Decode(&refreshModel)
 	if err != nil {
-		fmt.Println("Error decoding request body:", err)
 		response.BuildResponseFailure(http.StatusBadRequest, "Invalid request body", w)
 		return
 	}
@@ -78,8 +75,6 @@ func (ah *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 
 	newToken, err := ah.refreshTokenUsecase.RefreshAccessToken(refreshModel.RefreshToken)
 	if err != nil {
-		fmt.Println(err.Error())
-		fmt.Println(refreshModel.RefreshToken)
 		response.BuildResponseFailure(http.StatusInternalServerError, err.Error(), w)
 		return
 	}

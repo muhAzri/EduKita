@@ -4,7 +4,6 @@ import (
 	"EduKita/modules/core/constants"
 	"EduKita/modules/core/response"
 	"context"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -34,7 +33,6 @@ func (fm *FirebaseMiddleware) FirebaseAuthmiddleware(next http.Handler) http.Han
 
 		decoded, err := fm.AuthClient.VerifyIDToken(context.Background(), token)
 		if err != nil {
-			fmt.Println(err)
 			if strings.Contains(err.Error(), "ID token has expired") {
 				response.BuildResponseFailure(http.StatusUnauthorized, "Token has expired", w)
 			} else {

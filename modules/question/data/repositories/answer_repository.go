@@ -5,7 +5,6 @@ import (
 	"EduKita/modules/question/domain/entity"
 	"database/sql"
 	"errors"
-	"fmt"
 	"math"
 	"time"
 
@@ -87,7 +86,6 @@ func (r *AnswerRepositoryImpl) AnswerQuestion(QuestionID string, AnswerIndex int
 	if question.CorrectAnswerIndex == AnswerIndex {
 		isCorrect = true
 		additionalScore = int(math.Round(CalculateQuestionDifficulty(questionStats.CorrectAttempts, questionStats.TotalAttempts) * 50))
-		fmt.Println(additionalScore)
 		if additionalScore > 50 {
 			additionalScore = 50
 		} else if additionalScore < -50 {
@@ -99,7 +97,6 @@ func (r *AnswerRepositoryImpl) AnswerQuestion(QuestionID string, AnswerIndex int
 	} else {
 		isCorrect = false
 		additionalScore = int(math.Round(CalculateQuestionDifficulty(questionStats.CorrectAttempts, questionStats.TotalAttempts) * -50))
-		fmt.Println(additionalScore)
 
 		if additionalScore > 50 {
 			additionalScore = 50
