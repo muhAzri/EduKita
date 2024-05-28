@@ -11,3 +11,9 @@ CREATE TABLE IF NOT EXISTS history_answers (
 );
 
 CREATE INDEX IF NOT EXISTS idx_user_id on history_answers(user_id)
+
+CREATE INDEX IF NOT EXISTS idx_history_answers_user_id_question_id_is_correct ON history_answers (user_id, question_id, is_correct);
+
+CREATE INDEX IF NOT EXISTS idx_questions_learning_topic_id ON questions (learning_topic_id);
+
+CREATE INDEX IF NOT EXISTS idx_questions_id ON questions (id);
