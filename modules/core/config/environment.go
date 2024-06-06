@@ -2,13 +2,12 @@ package config
 
 import (
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func InitializeEnvironment() {
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	log.Println("Error loading .env file")
-	// }
+	godotenv.Load()
 
 }
 
