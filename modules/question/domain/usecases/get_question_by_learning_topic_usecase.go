@@ -7,7 +7,7 @@ import (
 
 type GetQuestionByLearningTopicUsecase interface {
 	GetQuestionByLearningTopic(learningTopicId string) ([]model.QuestionModel, error)
-	Get10RandomQuestionByLearningTopic(learningTopicId string) ([]model.QuestionModel, error)
+	Get10RandomQuestionByLearningTopic(userId, learningTopicId string) ([]model.QuestionModel, error)
 }
 
 type GetQuestionByLearningTopicUsecaseImpl struct {
@@ -29,9 +29,9 @@ func (u *GetQuestionByLearningTopicUsecaseImpl) GetQuestionByLearningTopic(learn
 	return questions, nil
 }
 
-func (u *GetQuestionByLearningTopicUsecaseImpl) Get10RandomQuestionByLearningTopic(learningTopicId string) ([]model.QuestionModel, error) {
+func (u *GetQuestionByLearningTopicUsecaseImpl) Get10RandomQuestionByLearningTopic(userId, learningTopicId string) ([]model.QuestionModel, error) {
 
-	questions, err := u.repository.Get10RandomQuestionByLearningTopic(learningTopicId)
+	questions, err := u.repository.Get10RandomQuestionByLearningTopic(userId, learningTopicId)
 
 	if err != nil {
 		return []model.QuestionModel{}, err
