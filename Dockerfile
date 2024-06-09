@@ -38,4 +38,4 @@ COPY --from=build /go/src/app/.env ./.env
 EXPOSE 80
 
 # Set the entrypoint for the container
-ENTRYPOINT /go/bin/web-app --port 80
+ENTRYPOINT ["./web-app", "--port", "80"]
