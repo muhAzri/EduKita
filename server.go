@@ -20,7 +20,7 @@ func main() {
 		r.Route(
 			"/api/v1/auth",
 			func(r chi.Router) {
-				auth.StartAuthModule(r, db, firebaseMiddleware,authMiddleware)
+				auth.StartAuthModule(r, db, firebaseMiddleware, authMiddleware)
 			},
 		)
 	})
@@ -38,5 +38,5 @@ func main() {
 		)
 	})
 
-	http.ListenAndServe(":80", r)
+	http.ListenAndServe(":8081", r)
 }
