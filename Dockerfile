@@ -36,7 +36,7 @@ COPY --from=build /go/src/app/edu-kita-firebase-admin.json ./edu-kita-firebase-a
 COPY --from=build /go/src/app/.env ./.env
 
 # Expose the port the app runs on
-EXPOSE 8080
+EXPOSE 80
 
 # Set the entrypoint for the container
 ENTRYPOINT ["./web-app", "--port", "8080"]
