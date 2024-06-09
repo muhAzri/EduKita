@@ -1,4 +1,5 @@
 version: "3"
+
 services:
   edu-kita-app:
     restart: always
@@ -8,3 +9,9 @@ services:
     environment:
       VIRTUAL_HOST: ${VIRTUAL_HOST}
       LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
+    networks:
+      - nginx-proxy-network
+
+networks:
+  nginx-proxy-network:
+    external: true

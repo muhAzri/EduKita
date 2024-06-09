@@ -1,4 +1,4 @@
-version: '3'
+version: "3.0"
 
 services:
   nginx-proxy:
@@ -12,6 +12,8 @@ services:
       - "/usr/share/nginx/html"
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
       - "/etc/nginx/certs"
+    networks:
+      - nginx-proxy-network
 
   letsencrypt-nginx-proxy-companion:
     restart: always
@@ -20,3 +22,8 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     volumes_from:
       - "nginx-proxy"
+    networks:
+      - nginx-proxy-network
+
+networks:
+  nginx-proxy-network:
