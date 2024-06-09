@@ -16,7 +16,7 @@ RUN go mod download && go mod verify
 COPY . .
 
 # Initialize and tidy Go modules
-RUN go mod init webserver
+RUN go mod init EduKita
 RUN go mod tidy
 
 # Build the application with specific flags
