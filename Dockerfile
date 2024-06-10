@@ -1,29 +1,13 @@
-# Build stage
-FROM golang:1.22-alpine AS build
+FROM golang:alpine
 
-LABEL maintainer="muhammad.azri.f.s@gmail.com"
-
-WORKDIR /app
-
-COPY ./go.mod ./go.sum ./
-
-RUN go mod download && go mod verify
-
-COPY . ./
-
-
-# Build the application
-RUN go build -o app ./server.go
-
-# Deploy stage
-FROM golang:1.22-alpine
+RUN apk update && apk add --no-cache git
 
 WORKDIR /app
 
-COPY --from=build /app/app ./
-COPY --from=build /app/edu-kita-firebase-admin.json ./edu-kita-firebase-admin.json
-COPY --from=build /app/.env ./.env
+COPY . .
 
-EXPOSE 8080
+RUN go mod tidy
 
-ENTRYPOINT ["./app"]
+RUN go build -o main
+
+ENTRYPOINT ["/app/main"]
