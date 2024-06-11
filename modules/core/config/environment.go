@@ -7,11 +7,7 @@ import (
 )
 
 func InitializeEnvironment() {
-	err := godotenv.Load()
-
-	if err != nil {
-		panic(err)
-	}
+	godotenv.Load()
 
 }
 
