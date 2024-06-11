@@ -9,9 +9,9 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func StartAuthModule(router chi.Router, db *sql.DB, firebaseMiddleware firebaseMiddleware.FirebaseMiddleware) {
+func StartAuthModule(router chi.Router, db *sql.DB, firebaseMiddleware firebaseMiddleware.FirebaseMiddleware, authMiddleware middleware.AuthMiddleware) {
 
-	routes.SetUpAuthRoutes(router, db, firebaseMiddleware)
+	routes.SetUpAuthRoutes(router, db, firebaseMiddleware, authMiddleware)
 }
 
 func StartAuthMiddleware() middleware.AuthMiddleware {

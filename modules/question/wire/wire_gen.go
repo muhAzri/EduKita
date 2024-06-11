@@ -15,6 +15,16 @@ import (
 	"github.com/google/wire"
 )
 
+// Injectors from admin_question_handler.go:
+
+func InitializeAdminQuestionHandler(db *sql.DB) *handler.AdminQuestionHandler {
+	questionRepositoryImpl := repositories.NewQuestionRepository(db)
+	adminQuestionUsecaseImpl := usecases.NewAdminQuestionUsecase(questionRepositoryImpl)
+	validate := NewValidator()
+	adminQuestionHandler := handler.NewAdminQuestionHandler(adminQuestionUsecaseImpl, validate)
+	return adminQuestionHandler
+}
+
 // Injectors from answer_handler.go:
 
 func InitializeAnswerHandler(db *sql.DB) *handler.AnswerHandler {
@@ -34,6 +44,10 @@ func InitializeQuestionHandler(db *sql.DB) *handler.QuestionHandler {
 	questionHandler := handler.NewQuestionHandler(getQuestionByLearningTopicUsecaseImpl, validate)
 	return questionHandler
 }
+
+// admin_question_handler.go:
+
+var AdminQuestionHandler = wire.NewSet(repositories.NewQuestionRepository, wire.Bind(new(repositories.QuestionRepository), new(*repositories.QuestionRepositoryImpl)), usecases.NewAdminQuestionUsecase, wire.Bind(new(usecases.AdminQuestionUsecase), new(*usecases.AdminQuestionUsecaseImpl)), NewValidator, handler.NewAdminQuestionHandler)
 
 // answer_handler.go:
 

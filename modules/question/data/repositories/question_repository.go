@@ -4,13 +4,14 @@ import (
 	"EduKita/modules/question/data/model"
 	"EduKita/modules/question/domain/entity"
 	"database/sql"
-	"strings"
+
+	"github.com/lib/pq"
 )
 
 type QuestionRepository interface {
 	CreateQuestion(question entity.Question) (model.QuestionModel, error)
 	GetQuestionByLearningTopic(learningTopicId string) ([]model.QuestionModel, error)
-	Get10RandomQuestionByLearningTopic(learningTopicId string) ([]model.QuestionModel, error)
+	Get10RandomQuestionByLearningTopic(userId, learningTopicId string) ([]model.QuestionModel, error)
 	GetQuestionByID(id string) (model.QuestionModel, error)
 	UpdateQuestion(question entity.Question) error
 	DeleteQuestion(id string) error
@@ -54,46 +55,50 @@ func (r *QuestionRepositoryImpl) GetQuestionByLearningTopic(learningTopicId stri
 
 	for rows.Next() {
 		var question model.QuestionModel
-		var answersRaw []byte
+		var answersRaw pq.StringArray
 
 		err := rows.Scan(&question.ID, &question.LearningTopicID, &question.Content, &answersRaw, &question.CreatedAt, &question.UpdatedAt)
 		if err != nil {
 			return []model.QuestionModel{}, err
 		}
-		answersString := string(answersRaw)
-		answersString = strings.Trim(answersString, "{}")
-
-		question.Answers = strings.Split(answersString, ",")
+		question.Answers = answersRaw
 		questions = append(questions, question)
 	}
 
 	return questions, nil
 }
 
-func (r *QuestionRepositoryImpl) Get10RandomQuestionByLearningTopic(learningTopicId string) ([]model.QuestionModel, error) {
+func (r *QuestionRepositoryImpl) Get10RandomQuestionByLearningTopic(userId, learningTopicId string) ([]model.QuestionModel, error) {
+	query := `
+        SELECT q.id, q.learning_topic_id, q.content, q.answers, q.created_at, q.updated_at
+        FROM questions q
+        WHERE q.learning_topic_id = $1
+        AND NOT EXISTS (
+            SELECT 1
+            FROM history_answers ha
+            WHERE ha.question_id = q.id
+            AND ha.user_id = $2
+            AND ha.is_correct = true
+        )
+        ORDER BY RANDOM()
+        LIMIT 10
+    `
 
-	query := `SELECT id, learning_topic_id, content, answers, created_at, updated_at FROM questions WHERE learning_topic_id = $1 ORDER BY RANDOM() LIMIT 10`
-
-	rows, err := r.db.Query(query, learningTopicId)
-
+	rows, err := r.db.Query(query, learningTopicId, userId)
 	if err != nil {
 		return []model.QuestionModel{}, err
 	}
 
 	var questions []model.QuestionModel
-
 	for rows.Next() {
 		var question model.QuestionModel
-		var answersRaw []byte
+		var answersRaw pq.StringArray
 
 		err := rows.Scan(&question.ID, &question.LearningTopicID, &question.Content, &answersRaw, &question.CreatedAt, &question.UpdatedAt)
 		if err != nil {
 			return []model.QuestionModel{}, err
 		}
-		answersString := string(answersRaw)
-		answersString = strings.Trim(answersString, "{}")
-
-		question.Answers = strings.Split(answersString, ",")
+		question.Answers = answersRaw
 		questions = append(questions, question)
 	}
 

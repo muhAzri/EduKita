@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"EduKita/modules/core/constants"
 	"EduKita/modules/core/response"
 	"EduKita/modules/question/domain/usecases"
 	"net/http"
@@ -43,10 +44,11 @@ func (qh *QuestionHandler) GetQuestionByLearningTopic(w http.ResponseWriter, r *
 }
 
 func (qh *QuestionHandler) Get10RandomQuestionByLearningTopic(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(constants.UserIDKey).(string)
 
 	learningTopicID := chi.URLParam(r, "learning_topic_id")
 
-	questions, err := qh.GetQuestionByLearningTopicUsecase.Get10RandomQuestionByLearningTopic(learningTopicID)
+	questions, err := qh.GetQuestionByLearningTopicUsecase.Get10RandomQuestionByLearningTopic(userID, learningTopicID)
 
 	if err != nil {
 		if err, ok := err.(*pq.Error); ok {

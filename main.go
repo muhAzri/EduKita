@@ -20,7 +20,7 @@ func main() {
 		r.Route(
 			"/api/v1/auth",
 			func(r chi.Router) {
-				auth.StartAuthModule(r, db, firebaseMiddleware)
+				auth.StartAuthModule(r, db, firebaseMiddleware, authMiddleware)
 			},
 		)
 	})
