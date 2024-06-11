@@ -4,7 +4,6 @@ import (
 	"EduKita/modules/core/constants"
 	"EduKita/modules/core/response"
 	"context"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -15,7 +14,7 @@ type FirebaseMiddleware struct {
 	AuthClient auth.Client
 }
 
-func (fm *FirebaseMiddleware) AuthMiddleware(next http.Handler) http.Handler {
+func (fm *FirebaseMiddleware) FirebaseAuthmiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
@@ -34,7 +33,6 @@ func (fm *FirebaseMiddleware) AuthMiddleware(next http.Handler) http.Handler {
 
 		decoded, err := fm.AuthClient.VerifyIDToken(context.Background(), token)
 		if err != nil {
-			fmt.Println(err)
 			if strings.Contains(err.Error(), "ID token has expired") {
 				response.BuildResponseFailure(http.StatusUnauthorized, "Token has expired", w)
 			} else {
@@ -43,7 +41,7 @@ func (fm *FirebaseMiddleware) AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), constants.UserIDKey, decoded.UID)
+		ctx := context.WithValue(r.Context(), constants.FirebaseIDKey, decoded.UID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 
 	})

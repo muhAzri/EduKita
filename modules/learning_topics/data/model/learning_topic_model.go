@@ -1,12 +1,12 @@
-package entity
+package model
 
-type LearningTopics struct {
-	ID          int    `json:"id"`
+type LearningTopicModel struct {
+	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Slug        string `json:"slug"`
 	Description string `json:"description"`
 	Type        string `json:"type"`
 	Icon        string `json:"icon"`
-	CreatedAt   string `json:"created_at"`
-	UpdatedAt   string `json:"updated_at"`
+	CreatedAt   int    `json:"createdAt"`
+	UpdatedAt   int    `json:"updatedAt"`
 }
