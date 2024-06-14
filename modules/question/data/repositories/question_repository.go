@@ -33,6 +33,13 @@ func (r *QuestionRepositoryImpl) CreateQuestion(question entity.Question) (model
 
 	var questionModel model.QuestionModel
 	err := row.Scan(&questionModel.ID, &questionModel.LearningTopicID, &questionModel.Content, &questionModel.Answers, &questionModel.CreatedAt, &questionModel.UpdatedAt)
+	if err != nil {
+		return model.QuestionModel{}, err
+	}
+
+	statsQuery := `INSERT INTO question_stats (question_id, total_attempts, correct_attempts) VALUES ($1, $2, $3)`
+
+	_, err = r.db.Exec(statsQuery, questionModel.ID, 0, 0)
 
 	if err != nil {
 		return model.QuestionModel{}, err
@@ -139,6 +146,14 @@ func (r *QuestionRepositoryImpl) DeleteQuestion(id string) error {
 	query := `DELETE FROM questions WHERE id = $1`
 
 	_, err := r.db.Exec(query, id)
+
+	if err != nil {
+		return err
+	}
+
+	queryStats := `DELETE FROM question_stats WHERE question_id = $1`
+
+	_, err = r.db.Exec(queryStats, id)
 
 	if err != nil {
 		return err
