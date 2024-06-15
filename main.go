@@ -5,6 +5,7 @@ import (
 	"EduKita/modules/core"
 	"EduKita/modules/firebase"
 	learningtopics "EduKita/modules/learning_topics"
+	"EduKita/modules/profile"
 	"EduKita/modules/question"
 	"net/http"
 
@@ -33,6 +34,7 @@ func main() {
 
 				learningtopics.StartLearningTopicsModule(r, db)
 				question.StartQuestionModule(r, db)
+				profile.StartProfileModule(r, db)
 
 			},
 		)
