@@ -70,7 +70,7 @@ func (pr *ProfileRepositoryImpl) GetUserFromUserId(userId string) (model.UserPro
 func (pr *ProfileRepositoryImpl) GetUserEloHistory(userId string) ([]model.UserEloHistory, error) {
 	var userEloHistory []model.UserEloHistory
 
-	query := `SELECT new_elo, updated_at FROM user_elo_history WHERE user_id = $1 AND updated_at >= $2 ORDER BY updated_at DESC`
+	query := `SELECT new_elo, updated_at FROM user_elo_history WHERE user_id = $1 AND updated_at >= $2 ORDER BY updated_at ASC`
 	sevenDaysAgo := time.Now().AddDate(0, 0, -7).UnixNano() / int64(time.Millisecond)
 	rows, err := pr.db.Query(query, userId, sevenDaysAgo)
 	if err != nil {
@@ -103,7 +103,7 @@ func (pr *ProfileRepositoryImpl) GetUserEloHistory(userId string) ([]model.UserE
 	}
 
 	sort.Slice(userEloHistory, func(i, j int) bool {
-		return userEloHistory[i].Date > userEloHistory[j].Date
+		return userEloHistory[i].Date < userEloHistory[j].Date
 	})
 
 	return userEloHistory, nil
