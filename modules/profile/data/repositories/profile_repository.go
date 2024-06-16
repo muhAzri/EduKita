@@ -41,6 +41,29 @@ func (pr *ProfileRepositoryImpl) GetUserFromUserId(userId string) (model.UserPro
 		userProfile.UserEloHistory = userEloHistory
 	}
 
+	totalQuizAnsweredQuery := `SELECT COUNT(*) FROM history_answers WHERE user_id = $1`
+	totalQuizAnsweredRow := pr.db.QueryRow(totalQuizAnsweredQuery, userId)
+
+	err = totalQuizAnsweredRow.Scan(&userProfile.TotalQuizAnswered)
+	if err != nil {
+		return model.UserProfileModel{}, err
+	}
+
+	currentEloQuery := `SELECT new_elo FROM user_elo_history WHERE user_id = $1 ORDER BY updated_at DESC LIMIT 1`
+	currentEloRow := pr.db.QueryRow(currentEloQuery, userId)
+
+	var currentElo int
+	err = currentEloRow.Scan(&currentElo)
+	if err != nil && err != sql.ErrNoRows {
+		return model.UserProfileModel{}, err
+	}
+
+	if err == sql.ErrNoRows {
+		currentElo = 1000
+	}
+
+	userProfile.CurrentElo = currentElo
+
 	return userProfile, nil
 }
 
