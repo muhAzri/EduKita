@@ -4,6 +4,7 @@ import (
 	"EduKita/modules/auth"
 	"EduKita/modules/core"
 	"EduKita/modules/firebase"
+	"EduKita/modules/leaderboard"
 	learningtopics "EduKita/modules/learning_topics"
 	"EduKita/modules/profile"
 	"EduKita/modules/question"
@@ -35,6 +36,7 @@ func main() {
 				learningtopics.StartLearningTopicsModule(r, db)
 				question.StartQuestionModule(r, db)
 				profile.StartProfileModule(r, db)
+				leaderboard.StartLeaderboardModule(r, db)
 
 			},
 		)
