@@ -42,5 +42,9 @@ func main() {
 		)
 	})
 
+	r.Get("/delete_account", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "delete_account.html")
+	})
+
 	http.ListenAndServe(":8080", r)
 }
